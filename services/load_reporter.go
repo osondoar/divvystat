@@ -60,7 +60,7 @@ func (dr LoadReporter) getLastStatuses(n int) []models.DivvyStatus {
 	}
 
 	for _, statusKey := range lastStatuKeys {
-		var stations []models.Station
+		stations := make(map[int]models.Station)
 
 		statusTuples, err := redis.Ints(dr.redisWrapper.redisConn.Do("HGETALL", statusKey))
 		if err != nil {
@@ -68,7 +68,7 @@ func (dr LoadReporter) getLastStatuses(n int) []models.DivvyStatus {
 		}
 
 		for i := 0; i < len(statusTuples); i += 2 {
-			stations = append(stations, models.Station{Id: statusTuples[i], AvailableDocks: statusTuples[i+1]})
+			stations[statusTuples[i]] = models.Station{Id: statusTuples[i], AvailableDocks: statusTuples[i+1]}
 		}
 		divvyStatuses = append(divvyStatuses, models.DivvyStatus{StationBeanList: stations, ExecutionTime: statusKey})
 	}
@@ -78,9 +78,12 @@ func (dr LoadReporter) getLastStatuses(n int) []models.DivvyStatus {
 
 func getStatusDiff(dr1 models.DivvyStatus, dr2 models.DivvyStatus) int {
 	var diffAcum int
-	for k, s1 := range dr1.StationBeanList {
-		s2 := dr2.StationBeanList[k]
-		diff := s2.AvailableDocks - s1.AvailableDocks
+	for key, station1 := range dr1.StationBeanList {
+		s2, ok := dr2.StationBeanList[key]
+		if !ok {
+			continue
+		}
+		diff := s2.AvailableDocks - station1.AvailableDocks
 		if diff < 0 {
 			diff = -diff
 		}

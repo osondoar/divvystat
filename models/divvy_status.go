@@ -2,5 +2,5 @@ package models
 
 type DivvyStatus struct {
 	ExecutionTime   string
-	StationBeanList []Station
+	StationBeanList map[int]Station
 }
