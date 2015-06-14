@@ -1,0 +1,15 @@
+.nvtooltip .activity{
+  padding: 2px 9px 2px 6px;
+}
+
+.nvtooltip .activity .bullet {
+  background-color: rgb(61, 183, 228);
+  width: 8px;
+  height: 8px;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+.nvtooltip .time{
+  padding: 2px 6px;
+  font-weight: bold;
+}
