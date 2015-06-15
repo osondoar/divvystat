@@ -16,9 +16,11 @@ func (controller LoadsController) Index(w http.ResponseWriter, r *http.Request) 
 	fromParam := r.URL.Query().Get("from")
 	toParam := r.URL.Query().Get("to")
 	var from, to int64
+
 	if fromParam != "" {
 		from = services.GetEpoch(fromParam)
 	} else {
+		// Return last 7 days by default
 		from = time.Now().AddDate(0, 0, -7).Unix()
 	}
 
@@ -28,8 +30,8 @@ func (controller LoadsController) Index(w http.ResponseWriter, r *http.Request) 
 		to = math.MaxInt64
 	}
 
-	lr := services.NewLoadReporter()
-	loads := lr.GetAverageLoads(from, to)
+	lr := services.NewLoadsService()
+	loads := lr.GetLoads(from, to)
 
 	controller.Render(w, r, loads)
 }

@@ -7,11 +7,11 @@ import (
 )
 
 func main() {
-	load_updater := services.NewLoadUpdater()
+	loadsService := services.NewLoadsService()
 
 	for {
-		load_updater.UpdateStationStatuses()
-		load_updater.CalculateAndAddNewLoad()
+		loadsService.UpdateStationStatuses()
+		loadsService.CalculateAndAddNewLoad()
 		time.Sleep(60 * time.Second)
 	}
 

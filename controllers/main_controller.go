@@ -13,12 +13,12 @@ type MainController struct {
 
 func (controller MainController) Index(w http.ResponseWriter, r *http.Request) {
 
-	loadReporter := services.NewLoadReporter()
+	loadsService := services.NewLoadsService()
 
-	Last1, _ := loadReporter.GetAverageLoad(1)
-	Last5, _ := loadReporter.GetAverageLoad(5)
-	Last15, _ := loadReporter.GetAverageLoad(10)
-	Last60, _ := loadReporter.GetAverageLoad(60)
+	Last1, _ := loadsService.CurrentAveragedLoad(1)
+	Last5, _ := loadsService.CurrentAveragedLoad(5)
+	Last15, _ := loadsService.CurrentAveragedLoad(10)
+	Last60, _ := loadsService.CurrentAveragedLoad(60)
 	report := &models.Report{Last1, Last5, Last15, Last60}
 	controller.RenderTemplate(w, r, "index.html", report)
 
