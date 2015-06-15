@@ -28,8 +28,11 @@ func (dr LoadReporter) GetAverageLoad(lastN int) (int, string) {
 		diff := getStatusDiff(divvyStatuses[i], divvyStatuses[i+1])
 		average += diff
 	}
-	if statusesSize > 0 {
-		return (average / statusesSize), divvyStatuses[0].ExecutionTime
+
+	if statusesSize > 1 {
+		return (average / (statusesSize - 1)), divvyStatuses[0].ExecutionTime
+	} else if statusesSize > 0 {
+		return 0, divvyStatuses[0].ExecutionTime
 	} else {
 		return 0, ""
 	}
